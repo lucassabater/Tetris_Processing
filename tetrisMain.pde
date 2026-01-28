@@ -15,10 +15,12 @@ int score = 0;
 int level = 1;
 int lines = 0;
 int gameSeed = 0;
-int nextPieceType = 1;
-int holdPieceType = 1;
 boolean gameOver = false;
-ActivePiece activePiece;
+
+// Pieces
+ActivePiece activePiece = new ActivePiece(0);
+int nextPieceType = 0;
+int holdPieceType = 0;
 
 
 void setup() {
@@ -42,7 +44,7 @@ void draw() {
     drawBoard(((smallGridlength*cellSize) + 2 * margin), margin);
     drawHold(margin, margin);
     drawInfo((smallGridlength*cellSize) + (cols * cellSize) + (margin * 3), margin);
-    //activePiece.display();
+    activePiece.display(((smallGridlength*cellSize) + 2 * margin), margin);
   }
 }
 

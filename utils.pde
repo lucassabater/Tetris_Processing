@@ -30,7 +30,7 @@ void onStartUp(byte[] payload) {
   resetInterface();
   gameSeed = (payload[0] & 0xFF << 8) | payload[1] & 0xFF;
 
-  activePiece.setType(int(payload[2]));
+  activePiece = new ActivePiece(int(payload[2]));  
   nextPieceType = int(payload[3]);
 
   gameOver = false;
