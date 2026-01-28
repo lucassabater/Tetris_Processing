@@ -33,6 +33,7 @@ void onStartUp(byte[] payload) {
   activePiece = new ActivePiece(int(payload[2]));  
   nextPieceType = int(payload[3]);
 
+  score = 0;
   gameOver = false;
 }
 
@@ -43,6 +44,7 @@ void resetInterface() {
   gameOver = false;
   holdPieceType = 0;
   nextPieceType = 0;
+  activePiece.show = false;
 
   for (int x = 0; x < cols; x++) {
     for (int y = 0; y < rows; y++) {

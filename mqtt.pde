@@ -39,7 +39,7 @@ void messageReceived(String topic, byte[] payload) {
   
   // SCORE
   else if (topic.equals("tetris/score")) {
-    score = (int(payload[0]) & 0xFF << 8) | int(payload[1]) & 0xFF;
+    score += (int(payload[0]) & 0xFF << 8) | int(payload[1]) & 0xFF;
   }
 
   // GAME OVER
