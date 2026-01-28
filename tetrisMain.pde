@@ -50,11 +50,8 @@ void draw() {
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
-    //mqttReset();
-    if (gameOver) {
-      gameOver = false;
-    } else {
-      gameOver = true;
-    }
+    resetInterface();
+    mqttReset();
+    gameOver = false;
   }
 }

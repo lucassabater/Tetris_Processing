@@ -6,8 +6,8 @@ public static final String MQTT_CLIENT_ID = "tetris_processing";
 private MQTTClient client;
 
 void initializeMQTT() {
-  client = new MQTTClient(this); //<>//
-  client.connect(MQTT_BROKER, MQTT_CLIENT_ID); //<>//
+  client = new MQTTClient(this); //<>// //<>// //<>//
+  client.connect(MQTT_BROKER, MQTT_CLIENT_ID); //<>// //<>// //<>//
   client.subscribe("tetris/newPos");
   client.subscribe("tetris/newPiece");
   client.subscribe("tetris/score");
@@ -23,6 +23,7 @@ void messageReceived(String topic, byte[] payload) {
     if (payload.length != 16) return;
 
     loadPieceData(0, payload, activePiece.currentPositions);
+    activePiece.show = true;
     
   // NEXT PIECE  
   } else if (topic.equals("tetris/newPiece")) {
@@ -57,7 +58,7 @@ void messageReceived(String topic, byte[] payload) {
 }
 
 void mqttReset() {
-  client.publish("tetris/cmd", "RESET");
+  client.publish("tetris/onInit", "1");
 }
 
 private void loadPieceData(int index, byte[] payload, PVector[] positions) {
