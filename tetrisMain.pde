@@ -1,9 +1,9 @@
 //Constants
-int smallGridlength = 4;
-int cellSize = 30;
-int cols = 10;
-int rows = 20;
-int margin = 30;
+public static final int smallGridlength = 4;
+public static final int cellSize = 30;
+public static final int cols = 10;
+public static final int rows = 20;
+public static final int margin = 30;
 
 //Assets
 PImage imgGameOver;
