@@ -1,19 +1,19 @@
-import mqtt.*;
+import mqtt.*; //<>// //<>//
 
-public static final String MQTT_BROKER = "mqtt://localhost";
+public static final String MQTT_BROKER = "mqtt://tom.uib.es";
 public static final String MQTT_CLIENT_ID = "tetris_processing";
 
 private MQTTClient client;
 
 void initializeMQTT() {
-  client = new MQTTClient(this); //<>// //<>// //<>//
-  client.connect(MQTT_BROKER, MQTT_CLIENT_ID); //<>// //<>// //<>//
+  client = new MQTTClient(this); //<>// //<>//
+  client.connect(MQTT_BROKER, MQTT_CLIENT_ID); //<>// //<>//
   client.subscribe("tetris/newPos");
   client.subscribe("tetris/newPiece");
   client.subscribe("tetris/score");
   client.subscribe("tetris/loose");
   client.subscribe("tetris/startUp");
-  client.subscribe("tetris/hold");
+  client.subscribe("tetris/sack");
 }
 
 void messageReceived(String topic, byte[] payload) {
@@ -24,8 +24,8 @@ void messageReceived(String topic, byte[] payload) {
 
     loadPieceData(0, payload, activePiece.currentPositions);
     activePiece.show = true;
-    
-  // NEXT PIECE  
+
+    // NEXT PIECE
   } else if (topic.equals("tetris/newPiece")) {
     for (int i = 0; i < activePiece.currentPositions.length; i++) {
       PVector pos = activePiece.currentPositions[i];
@@ -36,29 +36,39 @@ void messageReceived(String topic, byte[] payload) {
     loadPieceData(1, payload, activePiece.currentPositions);
     nextPieceType = payload[0];
   }
-  
+
   // SCORE
   else if (topic.equals("tetris/score")) {
-    score += (int(payload[0]) & 0xFF << 8) | int(payload[1]) & 0xFF;
+    checkLine();
+    score = ((int(payload[0]) & 0xFF) << 8) | (int(payload[1]) & 0xFF);
   }
 
   // GAME OVER
   else if (topic.equals("tetris/loose")) {
     gameOver = true;
 
-  // GAME START
+    // GAME START
   } else if (topic.equals("tetris/startUp")) {
     onStartUp(payload);
 
-  // HOLD PIECE
-  } else if (topic.equals("tetris/hold")) {
-    activePiece.type = holdPieceType;
-    holdPieceType = int(payload[0]);
+    // HOLD PIECE
+  } else if (topic.equals("tetris/sack")) {
+    if (int(payload[0]) == 0) {
+      int singleUse = activePiece.type;
+      activePiece = new ActivePiece(holdPieceType);
+      holdPieceType = singleUse;
+      loadPieceData(1, payload, activePiece.currentPositions);
+    } else {
+      holdPieceType = activePiece.type;
+      activePiece = new ActivePiece(nextPieceType);
+      loadPieceData(1, payload, activePiece.currentPositions);
+      nextPieceType = payload[0];
+    }
   }
 }
 
 void mqttReset() {
-  client.publish("tetris/onInit", "1");
+  client.publish("tetris/onInit", "1");  
 }
 
 private void loadPieceData(int index, byte[] payload, PVector[] positions) {

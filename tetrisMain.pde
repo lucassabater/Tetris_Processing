@@ -16,6 +16,7 @@ int level = 1;
 int lines = 0;
 int gameSeed = 0;
 boolean gameOver = false;
+boolean gameStart = true;
 
 // Pieces
 ActivePiece activePiece = new ActivePiece(0);
@@ -36,8 +37,8 @@ void setup() {
 }
 
 void draw() {
-  if (gameOver) {
-    drawGameOverScreen();
+  if (gameOver || gameStart) {
+    infoScreen();
     
   } else {
     background(cBackground);
@@ -52,6 +53,5 @@ void keyPressed() {
   if (key == 'r' || key == 'R') {
     resetInterface();
     mqttReset();
-    gameOver = false;
   }
 }

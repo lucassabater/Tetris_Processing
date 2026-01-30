@@ -66,9 +66,9 @@ void drawInfo(int x, int y) {
   text(str(score), x, yStats + 40);
 
   fill(cText);
-  text("LEVEL", x, yStats + 80);
+  text("SEED", x, yStats + 80);
   fill(0, 255, 255);
-  text(str(level), x, yStats + 110);
+  text(str(gameSeed), x, yStats + 110);
 }
 
 
@@ -76,17 +76,17 @@ void drawInfo(int x, int y) {
 void drawPreviewPiece(int type, int boxX, int boxY) {
   if (type == 0) return;
 
-  float boxWidth = 4 * cellSize; 
+  float boxWidth = 4 * cellSize;
   float boxHeight = 4 * cellSize;
-  
-  float scaleFactor = 0.85; 
+
+  float scaleFactor = 0.85;
   float miniCellSize = cellSize * scaleFactor;
 
-  PVector[] shape = getPreviewShape(type); 
+  PVector[] shape = getPreviewShape(type);
 
   float pieceBlockWidth = 4 * miniCellSize;
   float pieceBlockHeight = 4 * miniCellSize;
-  
+
   float marginX = (boxWidth - pieceBlockWidth) / 2;
   float marginY = (boxHeight - pieceBlockHeight) / 2;
 
@@ -96,25 +96,27 @@ void drawPreviewPiece(int type, int boxX, int boxY) {
   for (PVector p : shape) {
     float drawX = boxX + marginX + (p.x * miniCellSize);
     float drawY = boxY + marginY + (p.y * miniCellSize);
-    
+
     rect(drawX, drawY, miniCellSize, miniCellSize);
   }
 }
 
 // Game Over Screen
-void drawGameOverScreen() {
+void infoScreen() {
   background(0);
   imageMode(CORNER);
   image(imgGameOver, 0, 0);
-
-  // Veil for better text reading
-  fill(0, 0, 0, 150);
-  rect(0, 0, width, height);
-
   textAlign(CENTER, CENTER);
-  fill(255, 0, 0);
-  textSize(60);
-  text("GAME OVER", width/2, height/2 - 40);
+
+  if (gameOver == true) {
+    // Veil for better text reading
+    fill(0, 0, 0, 150);
+    rect(0, 0, width, height);
+
+    fill(255, 0, 0);
+    textSize(60);
+    text("GAME OVER", width/2, height/2 - 40);
+  }
 
   // Fliker effect using frameCount
   if (frameCount % 60 < 30) {
@@ -124,9 +126,15 @@ void drawGameOverScreen() {
   }
 
   textSize(30);
-  text("Press 'R' to Restart", width/2, height/2 + 40);
+  if (gameOver) {
+    text("Press 'R' to Restart", width/2, height/2 + 40);
+  } else {
+    text("Press BUTTON to start", width/2, height/2 + 40);
+  }
 
-  fill(255, 255, 0);
-  textSize(20);
-  text("Final Score: " + score, width/2, height/2 + 90);
+  if (gameOver == true) {
+    fill(255, 255, 0);
+    textSize(20);
+    text("Final Score: " + score, width/2, height/2 + 90);
+  }
 }
